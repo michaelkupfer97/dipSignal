@@ -11,7 +11,7 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="container">
         <Link className="brand" href={isHebrew ? "/he" : "/"}>
-          DipSignal
+          {isHebrew ? "דיפסיגנל" : "DipSignal"}
         </Link>
         <nav className="nav" aria-label="Primary navigation">
           {isHebrew ? (
@@ -24,7 +24,7 @@ export function SiteHeader() {
               <Link className="lang-active" href="/he">
                 עברית
               </Link>
-              <Link href="/">English</Link>
+              <Link href="/">אנגלית</Link>
             </>
           ) : (
             <>
