@@ -5,6 +5,13 @@ import { getHistory } from "@/lib/history/historyStore";
 export const metadata: Metadata = {
   title: "היסטוריית האינדיקטור (עברית)",
   description: "תרשים וטבלה של תאריכים שבהם לפחות 2 תנאים התקיימו במסגרת DipSignal.",
+  alternates: {
+    canonical: "/he/history",
+    languages: {
+      en: "/history",
+      he: "/he/history",
+    },
+  },
 };
 
 export default async function HebrewHistoryPage() {

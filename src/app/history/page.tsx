@@ -6,6 +6,13 @@ export const metadata: Metadata = {
   title: "S&P 500 Buy the Dip Indicator History",
   description:
     "Review historical DipSignal rows and dates where two or more S&P 500 buy the dip rules were met.",
+  alternates: {
+    canonical: "/history",
+    languages: {
+      en: "/history",
+      he: "/he/history",
+    },
+  },
 };
 
 export default async function HistoryPage() {

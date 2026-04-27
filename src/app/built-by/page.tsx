@@ -3,6 +3,13 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Built by Michael Kupfer",
   description: "Project credits and links for DipSignal by Michael Kupfer.",
+  alternates: {
+    canonical: "/built-by",
+    languages: {
+      en: "/built-by",
+      he: "/he/built-by",
+    },
+  },
 };
 
 export default function BuiltByPage() {

@@ -3,6 +3,13 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "איך האינדיקטור עובד (עברית)",
   description: "הסבר על Fear & Greed, VIX, S5FI ושלושה ימי ירידות רצופים במסגרת DipSignal.",
+  alternates: {
+    canonical: "/he/how-it-works",
+    languages: {
+      en: "/how-it-works",
+      he: "/he/how-it-works",
+    },
+  },
 };
 
 export default function HebrewHowItWorksPage() {

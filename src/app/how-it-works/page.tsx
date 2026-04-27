@@ -4,6 +4,13 @@ export const metadata: Metadata = {
   title: "How the S&P 500 Buy the Dip Indicator Works",
   description:
     "Learn how DipSignal combines Fear & Greed, VIX, S5FI breadth, and three red S&P 500 closes.",
+  alternates: {
+    canonical: "/how-it-works",
+    languages: {
+      en: "/how-it-works",
+      he: "/he/how-it-works",
+    },
+  },
 };
 
 export default function HowItWorksPage() {

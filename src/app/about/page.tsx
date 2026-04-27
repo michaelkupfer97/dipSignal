@@ -4,6 +4,13 @@ export const metadata: Metadata = {
   title: "About DipSignal",
   description:
     "About DipSignal, an educational S&P 500 Buy the Dip Indicator dashboard for market statistics.",
+  alternates: {
+    canonical: "/about",
+    languages: {
+      en: "/about",
+      he: "/he/about",
+    },
+  },
 };
 
 export default function AboutPage() {

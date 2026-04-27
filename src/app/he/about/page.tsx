@@ -3,6 +3,13 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "אודות DipSignal",
   description: "אודות DipSignal — דשבורד חינוכי לאינדיקטור “קנייה בדיפ” עבור S&P 500.",
+  alternates: {
+    canonical: "/he/about",
+    languages: {
+      en: "/about",
+      he: "/he/about",
+    },
+  },
 };
 
 export default function HebrewAboutPage() {

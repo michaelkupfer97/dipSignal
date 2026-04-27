@@ -1,6 +1,20 @@
+import type { Metadata } from "next";
 import { Dashboard } from "@/components/Dashboard";
 import { Faq } from "@/components/Faq";
 import { findLastSignal, getHistory, getLatest } from "@/lib/history/historyStore";
+
+export const metadata: Metadata = {
+  title: "DipSignal | S&P 500 Buy the Dip Indicator",
+  description:
+    "Live S&P 500 buy the dip indicator dashboard using Fear & Greed, VIX, S5FI breadth, and three red days.",
+  alternates: {
+    canonical: "/",
+    languages: {
+      en: "/",
+      he: "/he",
+    },
+  },
+};
 
 export default async function HomePage() {
   const [latest, history] = await Promise.all([getLatest(), getHistory()]);

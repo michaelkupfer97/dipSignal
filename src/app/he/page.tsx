@@ -1,6 +1,19 @@
+import type { Metadata } from "next";
 import { Dashboard } from "@/components/Dashboard";
 import { Faq } from "@/components/Faq";
 import { findLastSignal, getHistory, getLatest } from "@/lib/history/historyStore";
+
+export const metadata: Metadata = {
+  title: "DipSignal | אינדיקטור “קנייה בדיפ” ל‑S&P 500",
+  description: "דשבורד חי לאינדיקטור “קנייה בדיפ” עם Fear & Greed, VIX, S5FI ושלושה ימי ירידות.",
+  alternates: {
+    canonical: "/he",
+    languages: {
+      en: "/",
+      he: "/he",
+    },
+  },
+};
 
 export default async function HebrewHomePage() {
   const [latest, history] = await Promise.all([getLatest(), getHistory()]);

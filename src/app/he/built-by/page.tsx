@@ -3,6 +3,13 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "נבנה על ידי Michael Kupfer",
   description: "קרדיטים וקישורים עבור DipSignal — Michael Kupfer.",
+  alternates: {
+    canonical: "/he/built-by",
+    languages: {
+      en: "/built-by",
+      he: "/he/built-by",
+    },
+  },
 };
 
 export default function HebrewBuiltByPage() {
