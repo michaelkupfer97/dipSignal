@@ -13,6 +13,8 @@ export function SiteHeader() {
           <Link href="/history">History</Link>
           <Link href="/blog">Blog</Link>
           <Link href="/about">About</Link>
+          <Link href="/built-by">Built by</Link>
+          <Link href="/he">עברית</Link>
         </nav>
       </div>
     </header>

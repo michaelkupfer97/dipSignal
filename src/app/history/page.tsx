@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { HistoryChart } from "@/components/HistoryChart";
+import { HistoryChartNoSSR } from "@/components/HistoryChartNoSSR";
 import { getHistory } from "@/lib/history/historyStore";
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ export default async function HistoryPage() {
         Run the protected backfill route after deployment to populate approximately two years of
         rows.
       </p>
-      <HistoryChart rows={rows} />
+      <HistoryChartNoSSR rows={rows} />
       <h2>Signal Dates</h2>
       <div className="card">
         <table>

@@ -25,6 +25,15 @@ export default async function HomePage() {
       </section>
 
       <section className="container article">
+        <h2>Created after Micha Stocks video</h2>
+        <p>
+          This website was generated after Micha Stocks explained the idea and rules in this video:{" "}
+          <a href="https://youtu.be/tB8GeyQVWvY?si=5BMVBOVduyVI6Vtb" target="_blank" rel="noreferrer">
+            YouTube link
+          </a>
+          .
+        </p>
+
         <h2>How DipSignal Reads S&amp;P 500 Buy the Dip Conditions</h2>
         <p>
           DipSignal is a public English dashboard for investors who want a simple, repeatable way

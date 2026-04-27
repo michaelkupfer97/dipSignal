@@ -35,7 +35,7 @@ export function HistoryChart({ rows }: { rows: HistoryRow[] }) {
           <XAxis dataKey="date" minTickGap={42} />
           <YAxis domain={[0, 4]} allowDecimals={false} />
           <Tooltip />
-          <Line dataKey="rulesMet" type="monotone" stroke="#1d4ed8" dot={false} name="Rules met" />
+          <Line dataKey="rulesMet" type="monotone" stroke="#38BDF8" dot={false} name="Rules met" />
           {data
             .filter((row) => row.signal != null)
             .map((row) => (
@@ -44,8 +44,8 @@ export function HistoryChart({ rows }: { rows: HistoryRow[] }) {
                 x={row.date}
                 y={row.signal ?? 0}
                 r={4}
-                fill="#067647"
-                stroke="#067647"
+                fill="#22C55E"
+                stroke="#22C55E"
               />
             ))}
         </LineChart>
