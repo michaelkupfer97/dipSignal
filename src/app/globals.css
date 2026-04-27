@@ -83,6 +83,18 @@ a {
   color: var(--green);
 }
 
+.nav a.lang-active {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+.nav a.lang-active:hover,
+.nav a.lang-active:focus-visible {
+  color: var(--text);
+}
+
 .hero {
   padding: 48px 0 24px;
 }

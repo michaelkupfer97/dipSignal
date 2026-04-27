@@ -21,6 +21,9 @@ export function SiteHeader() {
               <Link href="/he/history">היסטוריה</Link>
               <Link href="/he/about">אודות</Link>
               <Link href="/he/built-by">נבנה על ידי</Link>
+              <Link className="lang-active" href="/he">
+                עברית
+              </Link>
               <Link href="/">English</Link>
             </>
           ) : (
@@ -31,6 +34,9 @@ export function SiteHeader() {
               <Link href="/blog">Blog</Link>
               <Link href="/about">About</Link>
               <Link href="/built-by">Built by</Link>
+              <Link className="lang-active" href="/">
+                English
+              </Link>
               <Link href="/he">עברית</Link>
             </>
           )}
