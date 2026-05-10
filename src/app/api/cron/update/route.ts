@@ -3,6 +3,8 @@ import { computeLatest } from "@/lib/indicators/aggregate";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+/** S5FI constituent fallback needs time; Hobby default timeouts are often too low. */
+export const maxDuration = 300;
 
 function isAuthorized(request: NextRequest) {
   const secret = process.env.CRON_SECRET;

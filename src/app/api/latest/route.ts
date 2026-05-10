@@ -4,6 +4,8 @@ import { getLatest } from "@/lib/history/historyStore";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+/** Only used when Blob has no `latest.json` yet; full compute needs headroom vs default timeout. */
+export const maxDuration = 300;
 
 const STALE_MS = 48 * 60 * 60 * 1000;
 
