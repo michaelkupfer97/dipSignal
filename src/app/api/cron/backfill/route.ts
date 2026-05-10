@@ -6,13 +6,13 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
 function isAuthorized(request: NextRequest) {
-  const secret = process.env.CRON_SECRET;
+  const secret = process.env.CRON_SECRET?.trim();
   if (!secret) {
     return process.env.NODE_ENV !== "production";
   }
 
-  const header = request.headers.get("authorization");
-  const querySecret = request.nextUrl.searchParams.get("secret");
+  const header = request.headers.get("authorization")?.trim();
+  const querySecret = request.nextUrl.searchParams.get("secret")?.trim();
   return header === `Bearer ${secret}` || querySecret === secret;
 }
 
