@@ -12,8 +12,14 @@ async function handle(request: NextRequest) {
     return NextResponse.json(cronUnauthorizedJson(auth.code), { status: auth.httpStatus });
   }
 
-  const rows = await backfillTwoYears();
-  return NextResponse.json({ rows: rows.length });
+  try {
+    const rows = await backfillTwoYears();
+    return NextResponse.json({ rows: rows.length });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Backfill failed";
+    console.error("[api/cron/backfill]", error);
+    return NextResponse.json({ error: "Backfill failed", message }, { status: 500 });
+  }
 }
 
 export async function GET(request: NextRequest) {

@@ -35,8 +35,11 @@ To backfill approximately two years of history:
 curl "http://localhost:3000/api/cron/backfill?secret=replace-with-a-long-random-secret"
 ```
 
-The backfill route may still be heavy if Stooq history is incomplete: it can fill gaps using
-historical S5FI computed from S&P 500 constituent candles.
+The backfill route builds ~2 years of rows from Yahoo, CNN history, and Stooq S5FI. **On Vercel**
+it does **not** run the full “500 constituents × 3 years” S5FI rebuild (that exceeds serverless time
+and memory). If Stooq has no usable series, historical **S5FI may be null** in those rows until a
+published feed works again; other indicators still populate. Gap-fill from constituents only runs
+when Stooq already covers most dates and fewer than ~60 days are missing.
 
 ## API: latest snapshot
 

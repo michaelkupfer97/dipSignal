@@ -52,7 +52,15 @@ export async function backfillTwoYears() {
     }
   }
 
-  if (needConstituents) {
+  /**
+   * Full constituent history is far too heavy for serverless (timeouts/OOM).
+   * Only run it when Stooq already covers most dates and we only need to fill gaps.
+   */
+  const stooqDates = stooqS5fi.size;
+  const canFillGapsWithConstituents =
+    stooqDates >= 200 && datesInRange.filter((d) => !stooqS5fi.has(d)).length <= 60;
+
+  if (needConstituents && canFillGapsWithConstituents) {
     constituentMap = await calculateS5fiHistoryFromConstituents("3y");
   }
 
