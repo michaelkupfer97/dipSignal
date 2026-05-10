@@ -28,26 +28,22 @@ async function writeLocal<T>(key: string, value: T) {
 }
 
 async function readBlob<T>(key: string, fallback: T): Promise<T> {
-  const { list } = await import("@vercel/blob");
-  const { blobs } = await list({ prefix: `${key}.json`, limit: 1 });
-  const blob = blobs.find((item) => item.pathname === `${key}.json`);
+  const { get } = await import("@vercel/blob");
+  const pathname = `${key}.json`;
+  const result = await get(pathname, { access: "private", useCache: false });
 
-  if (!blob) {
+  if (!result || result.statusCode !== 200 || !result.stream) {
     return fallback;
   }
 
-  const response = await fetch(blob.url, { cache: "no-store" });
-  if (!response.ok) {
-    return fallback;
-  }
-
-  return (await response.json()) as T;
+  const text = await new Response(result.stream).text();
+  return JSON.parse(text) as T;
 }
 
 async function writeBlob<T>(key: string, value: T) {
   const { put } = await import("@vercel/blob");
   await put(`${key}.json`, JSON.stringify(value, null, 2), {
-    access: "public",
+    access: "private",
     contentType: "application/json",
     allowOverwrite: true,
   });
