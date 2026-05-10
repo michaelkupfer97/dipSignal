@@ -30,6 +30,10 @@ export const metadata: Metadata = {
   },
   description:
     "DipSignal tracks S&P 500 buy the dip conditions using Fear & Greed, VIX, S5FI market breadth, and three red days.",
+  icons: {
+    icon: [{ url: "/logo/logo.jpg", type: "image/jpeg" }],
+    apple: "/logo/logo.jpg",
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
