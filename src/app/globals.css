@@ -263,10 +263,19 @@ a {
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
   font-size: 1.25rem;
   font-weight: 800;
   text-decoration: none;
   letter-spacing: -0.03em;
+}
+
+.brand__logo {
+  flex-shrink: 0;
+  border-radius: 10px;
+  object-fit: contain;
 }
 
 .nav {

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -22,7 +23,15 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="container">
         <Link className="brand" href={isHebrew ? "/he" : "/"}>
-          {isHebrew ? "דיפסיגנל" : "DipSignal"}
+          <Image
+            src="/logo/logo.jpg"
+            alt=""
+            width={40}
+            height={40}
+            className="brand__logo"
+            priority
+          />
+          <span>{isHebrew ? "דיפסיגנל" : "DipSignal"}</span>
         </Link>
         <nav className="nav" aria-label="Primary navigation">
           {isHebrew ? (
