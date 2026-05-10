@@ -3,8 +3,10 @@ import "server-only";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 
-const memory = new Map<string, unknown>();
+type CacheEntry = { value: unknown; expiresAt: number };
+const memory = new Map<string, CacheEntry>();
 const dataDir = path.join(process.cwd(), ".data");
+const TTL_MS = 60_000;
 
 function shouldUseBlobStorage() {
   return Boolean(process.env.BLOB_READ_WRITE_TOKEN && process.env.VERCEL);
@@ -51,18 +53,31 @@ async function writeBlob<T>(key: string, value: T) {
   });
 }
 
+function getCached<T>(key: string): T | undefined {
+  const entry = memory.get(key);
+  if (entry && entry.expiresAt > Date.now()) {
+    return entry.value as T;
+  }
+  return undefined;
+}
+
+function setCached(key: string, value: unknown) {
+  memory.set(key, { value, expiresAt: Date.now() + TTL_MS });
+}
+
 export async function readJson<T>(key: string, fallback: T): Promise<T> {
-  if (memory.has(key)) {
-    return memory.get(key) as T;
+  const hit = getCached<T>(key);
+  if (hit !== undefined) {
+    return hit;
   }
 
   const value = shouldUseBlobStorage() ? await readBlob(key, fallback) : await readLocal(key, fallback);
-  memory.set(key, value);
+  setCached(key, value);
   return value;
 }
 
 export async function writeJson<T>(key: string, value: T) {
-  memory.set(key, value);
+  setCached(key, value);
   if (shouldUseBlobStorage()) {
     await writeBlob(key, value);
     return;

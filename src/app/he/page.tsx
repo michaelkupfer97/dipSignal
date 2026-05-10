@@ -31,7 +31,7 @@ export default async function HebrewHomePage() {
             {lastSignal?.forwardReturnPct == null ? "בהמתנה" : `${lastSignal.forwardReturnPct.toFixed(2)}%`}{" "}
             בשבועות שלאחר מכן
           </p>
-          <Dashboard initial={latest} />
+          <Dashboard initial={latest} locale="he" />
         </div>
       </section>
 

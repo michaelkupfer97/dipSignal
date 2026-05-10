@@ -28,7 +28,16 @@ export async function appendHistory(row: HistoryRow) {
 }
 
 export function findLastSignal(rows: HistoryRow[]): LastSignalSummary | null {
-  const signal = [...rows].reverse().find((row) => row.rulesMet >= 2);
+  const reversed = [...rows].reverse();
+  const withReturn = reversed.find((row) => row.rulesMet >= 2 && row.forwardReturnPct != null);
+  if (withReturn) {
+    return {
+      date: withReturn.date,
+      forwardReturnPct: withReturn.forwardReturnPct ?? null,
+    };
+  }
+
+  const signal = reversed.find((row) => row.rulesMet >= 2);
   if (!signal) {
     return null;
   }

@@ -7,7 +7,8 @@ conditions are currently met.
 
 - CNN Fear & Greed Index `< 10`
 - VIX `> 30` from Yahoo Finance (`^VIX`)
-- S5FI `< 20`, using published S&P 500 stocks above 50-day average data first
+- S5FI `< 20`, primarily from **Stooq** daily CSV (with **EODData** and **S&P 500 constituent**
+  calculation as fallbacks; constituent result is cached once per UTC day)
 - Three consecutive red S&P 500 daily closes from Yahoo Finance (`^GSPC`)
 
 At least two active rules produce: "Statistically favorable dip conditions detected".
@@ -34,8 +35,14 @@ To backfill approximately two years of history:
 curl "http://localhost:3000/api/cron/backfill?secret=replace-with-a-long-random-secret"
 ```
 
-The backfill route is intentionally heavy because it may calculate historical S5FI from S&P 500
-constituent candles when no free published two-year S5FI feed is available.
+The backfill route may still be heavy if Stooq history is incomplete: it can fill gaps using
+historical S5FI computed from S&P 500 constituent candles.
+
+## API: latest snapshot
+
+`GET /api/latest` returns the last stored computation from `.data` (local) or Blob (Vercel). It does
+**not** recompute on every request—use the cron route or the first load when no snapshot exists yet.
+If the snapshot is older than 48 hours, the JSON may include `"stale": true`.
 
 ## Deploy To Vercel
 
@@ -48,7 +55,8 @@ constituent candles when no free published two-year S5FI feed is available.
 4. Deploy.
 5. Trigger `/api/cron/backfill` once with `Authorization: Bearer <CRON_SECRET>` or `?secret=<CRON_SECRET>`.
 
-`vercel.json` schedules `/api/cron/update` every 15 minutes.
+`vercel.json` schedules `/api/cron/update` on **US market weekdays** at **14:00** and **19:30 UTC**
+(approximately after the US open and before the close).
 
 ## AdSense Placement
 

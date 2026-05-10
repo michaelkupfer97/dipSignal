@@ -34,7 +34,7 @@ export default async function HomePage() {
               : `${lastSignal.forwardReturnPct.toFixed(2)}%`}{" "}
             in the following weeks
           </p>
-          <Dashboard initial={latest} />
+          <Dashboard initial={latest} locale="en" />
         </div>
       </section>
 
@@ -74,9 +74,10 @@ export default async function HomePage() {
           Combining the rules gives a clearer statistical snapshot.
         </p>
         <p>
-          The dashboard updates from cached server data every 15 minutes. Some inputs, especially
-          breadth indicators such as S5FI, are end-of-day series, so they may not change every time
-          the page refreshes. DipSignal stores a history of computed rows so visitors can review
+          The dashboard snapshot updates on US market weekdays around market open and before the
+          close (scheduled in UTC). Some inputs, especially breadth indicators such as S5FI, are
+          end-of-day series, so they may not change on every run. DipSignal stores a history of
+          computed rows so visitors can review
           previous dates where two or more rules were active and compare those signals with later
           S&amp;P 500 returns. The result is not a trading system and does not guarantee future
           returns, but it gives a transparent framework for studying market drawdowns.

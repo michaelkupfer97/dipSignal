@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fira_Code, Fira_Sans } from "next/font/google";
+import { Fira_Code, Fira_Sans, Heebo } from "next/font/google";
 import "./globals.css";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -16,6 +16,12 @@ const firaCode = Fira_Code({
   weight: ["400", "500", "600", "700"],
 });
 
+const heebo = Heebo({
+  subsets: ["hebrew", "latin"],
+  variable: "--font-hebrew",
+  weight: ["400", "500", "600", "700", "800"],
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: {
@@ -29,7 +35,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${firaSans.variable} ${firaCode.variable}`}>
+      <body className={`${firaSans.variable} ${firaCode.variable} ${heebo.variable}`}>
         <SiteHeader />
         {children}
         <SiteFooter />

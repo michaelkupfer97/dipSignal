@@ -17,6 +17,8 @@ export const metadata: Metadata = {
 export default async function HebrewHistoryPage() {
   const rows = await getHistory();
   const signals = rows.filter((row) => row.rulesMet >= 2).reverse();
+  const firstDate = rows[0]?.date;
+  const lastDate = rows.at(-1)?.date;
 
   return (
     <main className="container article" dir="rtl">
@@ -26,35 +28,50 @@ export default async function HebrewHistoryPage() {
         הדף מציג היסטוריה שנשמרה ומסמן תאריכים שבהם לפחות שני תנאים התקיימו. את ה‑backfill מפעילים
         פעם אחת לאחר ההתקנה כדי למלא כ‑2 שנים.
       </p>
-      <HistoryChartNoSSR rows={rows} />
+      <p className="muted history-meta">
+        {rows.length} שורות נשמרו
+        {firstDate && lastDate ? ` · ${firstDate} → ${lastDate}` : ""}
+      </p>
+      <HistoryChartNoSSR
+        rows={rows}
+        emptyMessage="עדיין אין היסטוריה שמורה. להרצת backfill לאחר ההתקנה."
+      />
       <h2>תאריכי אות</h2>
-      <div className="card">
-        <table>
-          <thead>
-            <tr>
-              <th>תאריך</th>
-              <th>תנאים</th>
-              <th>VIX</th>
-              <th>S5FI</th>
-              <th>3 ימי ירידה</th>
-              <th>תשואה קדימה</th>
-            </tr>
-          </thead>
-          <tbody>
-            {signals.map((row) => (
-              <tr key={row.date}>
-                <td>{row.date}</td>
-                <td>{row.rulesMet}</td>
-                <td>{row.vix?.toFixed(2) ?? "-"}</td>
-                <td>{row.s5fi?.toFixed(2) ?? "-"}</td>
-                <td>{row.redDays == null ? "-" : row.redDays ? "כן" : "לא"}</td>
-                <td>{row.forwardReturnPct == null ? "בהמתנה" : `${row.forwardReturnPct.toFixed(2)}%`}</td>
+      {signals.length === 0 ? (
+        <div className="card history-empty">
+          <p className="muted">
+            עדיין אין תאריכים שבהם שני תנאים או יותר פעילים במקביל. אפשר להריץ backfill או להמתין
+            ללחץ בשוק שמפעיל את המודל.
+          </p>
+        </div>
+      ) : (
+        <div className="card">
+          <table>
+            <thead>
+              <tr>
+                <th>תאריך</th>
+                <th>תנאים</th>
+                <th>VIX</th>
+                <th>S5FI</th>
+                <th>3 ימי ירידה</th>
+                <th>תשואה קדימה</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {signals.map((row) => (
+                <tr key={row.date}>
+                  <td>{row.date}</td>
+                  <td>{row.rulesMet}</td>
+                  <td>{row.vix?.toFixed(2) ?? "-"}</td>
+                  <td>{row.s5fi?.toFixed(2) ?? "-"}</td>
+                  <td>{row.redDays == null ? "-" : row.redDays ? "כן" : "לא"}</td>
+                  <td>{row.forwardReturnPct == null ? "בהמתנה" : `${row.forwardReturnPct.toFixed(2)}%`}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </main>
   );
 }
-

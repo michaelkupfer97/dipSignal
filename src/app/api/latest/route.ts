@@ -5,20 +5,20 @@ import { getLatest } from "@/lib/history/historyStore";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+const STALE_MS = 48 * 60 * 60 * 1000;
+
 export async function GET() {
   const latest = await getLatest();
-  const ageMs = latest ? Date.now() - new Date(latest.timestamp).getTime() : Number.POSITIVE_INFINITY;
-
-  if (latest && ageMs < 15 * 60 * 1000) {
-    return NextResponse.json(latest);
+  if (latest) {
+    const ageMs = Date.now() - new Date(latest.timestamp).getTime();
+    const payload =
+      ageMs > STALE_MS ? { ...latest, stale: true as const } : latest;
+    return NextResponse.json(payload);
   }
 
   try {
     return NextResponse.json(await computeLatest());
   } catch (error) {
-    if (latest) {
-      return NextResponse.json({ ...latest, stale: true });
-    }
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Unable to compute latest result" },
       { status: 500 },

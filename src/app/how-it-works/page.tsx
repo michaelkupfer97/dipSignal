@@ -19,14 +19,14 @@ export default function HowItWorksPage() {
       <p className="eyebrow">Methodology</p>
       <h1>S&amp;P 500 Buy the Dip Indicator: How It Works</h1>
       <p>
-        DipSignal uses four transparent rules. Each rule becomes green when the statistical
-        condition is met. If at least two are green, the dashboard says statistically favorable dip
-        conditions are detected.
+        DipSignal uses four transparent rules. Each rule is <strong>triggered</strong> when its
+        statistical condition is met. If at least two are triggered, the dashboard flags statistically
+        favorable dip conditions.
       </p>
       <h2>Fear &amp; Greed Index</h2>
       <p>
         CNN&apos;s Fear &amp; Greed Index blends several market sentiment measures into a 0 to 100
-        score. DipSignal marks this rule green only when the index is below 10, which represents
+        score. DipSignal marks this rule triggered only when the index is below 10, which represents
         extreme fear.
       </p>
       <h2>VIX Above 30</h2>

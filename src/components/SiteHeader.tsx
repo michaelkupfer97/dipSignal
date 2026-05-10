@@ -7,6 +7,17 @@ export function SiteHeader() {
   const pathname = usePathname();
   const isHebrew = pathname === "/he" || pathname.startsWith("/he/");
 
+  const isActive = (href: string) => {
+    const homeHref = isHebrew ? "/he" : "/";
+    if (href === homeHref) {
+      return pathname === homeHref;
+    }
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
+
+  const navClass = (href: string) =>
+    isActive(href) ? "nav-active" : undefined;
+
   return (
     <header className="site-header">
       <div className="container">
@@ -16,11 +27,48 @@ export function SiteHeader() {
         <nav className="nav" aria-label="Primary navigation">
           {isHebrew ? (
             <>
-              <Link href="/he">בית</Link>
-              <Link href="/he/how-it-works">איך זה עובד</Link>
-              <Link href="/he/history">היסטוריה</Link>
-              <Link href="/he/about">אודות</Link>
-              <Link href="/he/built-by">נבנה על ידי</Link>
+              <Link
+                href="/he"
+                className={navClass("/he")}
+                aria-current={isActive("/he") ? "page" : undefined}
+              >
+                בית
+              </Link>
+              <Link
+                href="/he/how-it-works"
+                className={navClass("/he/how-it-works")}
+                aria-current={isActive("/he/how-it-works") ? "page" : undefined}
+              >
+                איך זה עובד
+              </Link>
+              <Link
+                href="/he/history"
+                className={navClass("/he/history")}
+                aria-current={isActive("/he/history") ? "page" : undefined}
+              >
+                היסטוריה
+              </Link>
+              <Link
+                href="/he/about"
+                className={navClass("/he/about")}
+                aria-current={isActive("/he/about") ? "page" : undefined}
+              >
+                אודות
+              </Link>
+              <Link
+                href="/he/blog"
+                className={navClass("/he/blog")}
+                aria-current={isActive("/he/blog") ? "page" : undefined}
+              >
+                בלוג
+              </Link>
+              <Link
+                href="/he/built-by"
+                className={navClass("/he/built-by")}
+                aria-current={isActive("/he/built-by") ? "page" : undefined}
+              >
+                נבנה על ידי
+              </Link>
               <Link className="lang-active" href="/he">
                 עברית
               </Link>
@@ -28,12 +76,48 @@ export function SiteHeader() {
             </>
           ) : (
             <>
-              <Link href="/">Home</Link>
-              <Link href="/how-it-works">How it works</Link>
-              <Link href="/history">History</Link>
-              <Link href="/blog">Blog</Link>
-              <Link href="/about">About</Link>
-              <Link href="/built-by">Built by</Link>
+              <Link
+                href="/"
+                className={navClass("/")}
+                aria-current={isActive("/") ? "page" : undefined}
+              >
+                Home
+              </Link>
+              <Link
+                href="/how-it-works"
+                className={navClass("/how-it-works")}
+                aria-current={isActive("/how-it-works") ? "page" : undefined}
+              >
+                How it works
+              </Link>
+              <Link
+                href="/history"
+                className={navClass("/history")}
+                aria-current={isActive("/history") ? "page" : undefined}
+              >
+                History
+              </Link>
+              <Link
+                href="/blog"
+                className={navClass("/blog")}
+                aria-current={isActive("/blog") ? "page" : undefined}
+              >
+                Blog
+              </Link>
+              <Link
+                href="/about"
+                className={navClass("/about")}
+                aria-current={isActive("/about") ? "page" : undefined}
+              >
+                About
+              </Link>
+              <Link
+                href="/built-by"
+                className={navClass("/built-by")}
+                aria-current={isActive("/built-by") ? "page" : undefined}
+              >
+                Built by
+              </Link>
               <Link className="lang-active" href="/">
                 English
               </Link>

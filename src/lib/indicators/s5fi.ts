@@ -1,6 +1,7 @@
 import type { Candle, IndicatorResult } from "@/lib/types";
 import { fetchPublishedS5fi } from "@/lib/market/s5fiProviders";
 import { fetchSp500Constituents } from "@/lib/market/sp500";
+import { getS5fiConstituentCache, setS5fiConstituentCache } from "@/lib/storage/s5fiCacheStore";
 import { getDailyCandles } from "@/lib/market/yahoo";
 
 function sma(values: number[]) {
@@ -68,10 +69,10 @@ export async function calculateS5fiHistoryFromConstituents(range = "3y") {
       for (let index = 49; index < candles.length; index += 1) {
         const window = candles.slice(index - 49, index + 1);
         const average = sma(window.map((candle) => candle.close));
-        const date = candles[index].date;
+        const date = candles[index]!.date;
         const current = dateCounts.get(date) ?? { above: 0, total: 0 };
         current.total += 1;
-        if (candles[index].close > average) {
+        if (candles[index]!.close > average) {
           current.above += 1;
         }
         dateCounts.set(date, current);
@@ -89,31 +90,52 @@ export async function calculateS5fiHistoryFromConstituents(range = "3y") {
   );
 }
 
+function utcToday() {
+  return new Date().toISOString().slice(0, 10);
+}
+
 export async function getS5fi(): Promise<IndicatorResult> {
   try {
-    let value: number;
-    let asOf = new Date().toISOString();
-    let source = "EODData INDEX/S5FI";
-
     try {
       const quote = await fetchPublishedS5fi();
-      value = quote.value;
-      asOf = new Date(`${quote.date}T21:00:00.000Z`).toISOString();
-      source = quote.source;
+      return {
+        key: "s5fi",
+        label: "S5FI",
+        status: quote.value < 20 ? "met" : "not_met",
+        value: quote.value,
+        threshold: "< 20",
+        source: quote.source,
+        asOf: new Date(`${quote.date}T16:00:00.000Z`).toISOString(),
+      };
     } catch {
-      value = await calculateS5fiFromConstituents();
-      source = "Calculated from S&P 500 constituents";
-    }
+      const day = utcToday();
+      const cached = await getS5fiConstituentCache();
+      if (cached && cached.utcDate === day) {
+        return {
+          key: "s5fi",
+          label: "S5FI",
+          status: cached.value < 20 ? "met" : "not_met",
+          value: cached.value,
+          threshold: "< 20",
+          source: cached.source,
+          asOf: new Date().toISOString(),
+        };
+      }
 
-    return {
-      key: "s5fi",
-      label: "S5FI",
-      status: value < 20 ? "met" : "not_met",
-      value,
-      threshold: "< 20",
-      source,
-      asOf,
-    };
+      const value = await calculateS5fiFromConstituents();
+      const source = "Calculated from S&P 500 constituents";
+      await setS5fiConstituentCache({ utcDate: day, value, source });
+
+      return {
+        key: "s5fi",
+        label: "S5FI",
+        status: value < 20 ? "met" : "not_met",
+        value,
+        threshold: "< 20",
+        source,
+        asOf: new Date().toISOString(),
+      };
+    }
   } catch (error) {
     return {
       key: "s5fi",
@@ -121,7 +143,7 @@ export async function getS5fi(): Promise<IndicatorResult> {
       status: "error",
       value: null,
       threshold: "< 20",
-      source: "EODData INDEX/S5FI",
+      source: "Stooq / EODData / constituents",
       asOf: new Date().toISOString(),
       error: error instanceof Error ? error.message : "Unknown error",
     };

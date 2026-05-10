@@ -4,6 +4,7 @@ import { getS5fi } from "./s5fi";
 import { getThreeRedDays } from "./redDays";
 import { getVix } from "./vix";
 import { appendHistory, findLastSignal, getHistory, setLatest } from "@/lib/history/historyStore";
+import { updateForwardReturns } from "@/lib/history/forwardReturns";
 import { getDailyCandles } from "@/lib/market/yahoo";
 
 function numericValue(value: number | boolean | null) {
@@ -20,12 +21,28 @@ async function getSp500LatestClose() {
 }
 
 export async function computeLatest(): Promise<LatestComputation> {
+  const timestamp = new Date().toISOString();
   const indicators = await Promise.all([getFearGreed(), getVix(), getS5fi(), getThreeRedDays()]);
   const rulesMet = indicators.filter((indicator) => indicator.status === "met").length;
-  const history = await getHistory();
 
+  const redRaw = indicators.find((item) => item.key === "redDays")?.value;
+  const row: HistoryRow = {
+    timestamp,
+    date: timestamp.slice(0, 10),
+    fearGreed: numericValue(indicators.find((item) => item.key === "fearGreed")?.value ?? null),
+    vix: numericValue(indicators.find((item) => item.key === "vix")?.value ?? null),
+    s5fi: numericValue(indicators.find((item) => item.key === "s5fi")?.value ?? null),
+    redDays: typeof redRaw === "boolean" ? redRaw : null,
+    rulesMet,
+    sp500Close: await getSp500LatestClose(),
+  };
+
+  await appendHistory(row);
+  await updateForwardReturns();
+
+  const history = await getHistory();
   const latest: LatestComputation = {
-    timestamp: new Date().toISOString(),
+    timestamp,
     indicators,
     rulesMet,
     totalRules: 4,
@@ -34,22 +51,5 @@ export async function computeLatest(): Promise<LatestComputation> {
   };
 
   await setLatest(latest);
-
-  const today = latest.timestamp.slice(0, 10);
-  const row: HistoryRow = {
-    timestamp: latest.timestamp,
-    date: today,
-    fearGreed: numericValue(indicators.find((item) => item.key === "fearGreed")?.value ?? null),
-    vix: numericValue(indicators.find((item) => item.key === "vix")?.value ?? null),
-    s5fi: numericValue(indicators.find((item) => item.key === "s5fi")?.value ?? null),
-    redDays:
-      typeof indicators.find((item) => item.key === "redDays")?.value === "boolean"
-        ? (indicators.find((item) => item.key === "redDays")?.value as boolean)
-        : null,
-    rulesMet,
-    sp500Close: await getSp500LatestClose(),
-  };
-
-  await appendHistory(row);
   return latest;
 }

@@ -1,4 +1,5 @@
 import { fetchText } from "./http";
+import { fetchStooqDailyCsv, STOOQ_S5FI_CANDIDATES } from "./stooq";
 
 export type S5fiQuote = {
   date: string;
@@ -21,7 +22,7 @@ function parseEodDate(value: string) {
     "Oct",
     "Nov",
     "Dec",
-  ].indexOf(monthText);
+  ].indexOf(monthText ?? "");
 
   if (!day || month < 0 || !yearText) {
     return value;
@@ -42,12 +43,58 @@ export async function fetchS5fiFromEodData(): Promise<S5fiQuote> {
   }
 
   return {
-    date: parseEodDate(match[1]),
+    date: parseEodDate(match[1]!),
     value: Number(match[5]),
     source: "EODData INDEX/S5FI",
   };
 }
 
+async function fetchS5fiFromStooq(): Promise<S5fiQuote> {
+  let lastError: Error | null = null;
+  for (const sym of STOOQ_S5FI_CANDIDATES) {
+    try {
+      const rows = await fetchStooqDailyCsv(sym);
+      const last = rows.at(-1);
+      if (!last) continue;
+      return {
+        date: last.date,
+        value: last.close,
+        source: `Stooq ${sym}`,
+      };
+    } catch (e) {
+      lastError = e instanceof Error ? e : new Error(String(e));
+    }
+  }
+  throw lastError ?? new Error("Stooq S5FI fetch failed for all symbols");
+}
+
+/**
+ * Published S5FI: Stooq first (reliable), then EODData scrape.
+ */
 export async function fetchPublishedS5fi(): Promise<S5fiQuote> {
-  return fetchS5fiFromEodData();
+  try {
+    return await fetchS5fiFromStooq();
+  } catch {
+    return fetchS5fiFromEodData();
+  }
+}
+
+/** Full daily series for backfill (same symbol priority as latest quote). */
+export async function fetchPublishedS5fiHistory(): Promise<Map<string, number>> {
+  const merged = new Map<string, number>();
+  for (const sym of STOOQ_S5FI_CANDIDATES) {
+    try {
+      const rows = await fetchStooqDailyCsv(sym);
+      if (rows.length === 0) continue;
+      for (const row of rows) {
+        merged.set(row.date, row.close);
+      }
+      if (merged.size > 100) {
+        return merged;
+      }
+    } catch {
+      // try next symbol
+    }
+  }
+  return merged;
 }

@@ -12,7 +12,7 @@ const faqs = [
   {
     question: "How often does DipSignal update?",
     answer:
-      "The site is designed to refresh its cached computation every 15 minutes, with some inputs updating only at end of day.",
+      "The site refreshes its stored snapshot on a weekday schedule (around US open and before close, UTC). Some inputs update only at end of day.",
   },
   {
     question: "Why use two or more conditions?",
