@@ -32,7 +32,7 @@ export default async function HomePage() {
             {lastSignal?.forwardReturnPct == null
               ? "pending"
               : `${lastSignal.forwardReturnPct.toFixed(2)}%`}{" "}
-            in the following weeks
+            since then (through the latest close)
           </p>
           <Dashboard initial={latest} locale="en" />
         </div>

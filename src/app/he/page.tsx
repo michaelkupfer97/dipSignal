@@ -29,7 +29,7 @@ export default async function HebrewHomePage() {
           <p className="muted">
             הפעם האחרונה שהתנאים הופיעו: {lastSignal?.date ?? "אין עדיין מספיק היסטוריה"} — המדד החזיר{" "}
             {lastSignal?.forwardReturnPct == null ? "בהמתנה" : `${lastSignal.forwardReturnPct.toFixed(2)}%`}{" "}
-            בשבועות שלאחר מכן
+            מאז אז (עד לסגירה העדכנית)
           </p>
           <Dashboard initial={latest} locale="he" />
         </div>

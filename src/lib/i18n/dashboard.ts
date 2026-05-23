@@ -7,7 +7,7 @@ const he = {
   rulesMetLabel: "\u05ea\u05e0\u05d0\u05d9\u05dd \u05e9\u05d4\u05ea\u05e7\u05d9\u05d9\u05de\u05d5",
   lastUpdated: "\u05e2\u05d5\u05d3\u05db\u05df \u05dc\u05d0\u05d7\u05e8\u05d5\u05e0\u05d4",
   lastSignal: "\u05d0\u05d5\u05ea \u05d0\u05d7\u05e8\u05d5\u05df",
-  forwardReturn: "\u05ea\u05e9\u05d5\u05d0\u05d4 \u05e7\u05d3\u05d9\u05de\u05d4",
+  forwardReturn: "\u05ea\u05e9\u05d5\u05d0\u05d4 \u05de\u05d0\u05d6 \u05d4\u05d0\u05d5\u05ea",
   noSignalYet: "\u05e2\u05d3\u05d9\u05d9\u05df \u05d0\u05d9\u05df \u05d0\u05d5\u05ea \u05d1\u05d4\u05d9\u05e1\u05d8\u05d5\u05e8\u05d9\u05d4",
   pending: "\u05d1\u05d4\u05de\u05ea\u05e0\u05d4",
   refreshHint:
@@ -38,7 +38,7 @@ export const dashboardCopy = {
     rulesMetLabel: "Rules met",
     lastUpdated: "Last updated",
     lastSignal: "Last signal",
-    forwardReturn: "Forward return",
+    forwardReturn: "Return since signal",
     noSignalYet: "No signal logged yet",
     pending: "Pending",
     refreshHint:

@@ -2,29 +2,52 @@ import type { HistoryRow } from "@/lib/types";
 import { getDailyCandles } from "@/lib/market/yahoo";
 import { getHistory, setHistory } from "./historyStore";
 
-const FORWARD_SESSIONS = 20;
+/** Return from signal-day close to latest SPX close (%). */
+export function returnSinceSignalPct(baseClose: number, latestClose: number) {
+  return ((latestClose - baseClose) / baseClose) * 100;
+}
+
+export function resolveSignalBaseClose(
+  row: HistoryRow,
+  closeByDate: Map<string, number>,
+): number | null {
+  if (row.sp500Close != null && row.sp500Close > 0) {
+    return row.sp500Close;
+  }
+  return closeByDate.get(row.date) ?? null;
+}
 
 /**
- * Fill forwardReturnPct (20 trading sessions) where SPX data exists and value was null.
+ * Recompute forwardReturnPct for all signal rows (rulesMet >= 2):
+ * close on signal day through latest ^GSPC close.
  */
 export async function updateForwardReturns() {
   const rows = await getHistory();
   if (rows.length === 0) return;
 
   const spx = await getDailyCandles("^GSPC", "5y");
-  const indexByDate = new Map(spx.map((c, i) => [c.date, i]));
+  const latest = spx.at(-1);
+  if (!latest) return;
+
+  const latestClose = latest.close;
+  const closeByDate = new Map(spx.map((candle) => [candle.date, candle.close]));
 
   let changed = false;
   const next = rows.map((row) => {
-    if (row.forwardReturnPct != null) return row;
-    const idx = indexByDate.get(row.date);
-    if (idx === undefined) return row;
-    const future = spx[idx + FORWARD_SESSIONS];
-    if (!future) return row;
-    const base = spx[idx]!.close;
-    const pct = ((future.close - base) / base) * 100;
+    if (row.rulesMet < 2) return row;
+
+    const baseClose = resolveSignalBaseClose(row, closeByDate);
+    if (baseClose == null) return row;
+
+    const forwardReturnPct = returnSinceSignalPct(baseClose, latestClose);
+    const sp500Close = row.sp500Close ?? baseClose;
+
+    if (row.forwardReturnPct === forwardReturnPct && row.sp500Close === sp500Close) {
+      return row;
+    }
+
     changed = true;
-    return { ...row, forwardReturnPct: pct };
+    return { ...row, sp500Close, forwardReturnPct };
   });
 
   if (changed) {

@@ -54,7 +54,7 @@ export default async function HebrewHistoryPage() {
                 <th>VIX</th>
                 <th>S5FI</th>
                 <th>3 ימי ירידה</th>
-                <th>תשואה קדימה</th>
+                <th>תשואה מאז האות</th>
               </tr>
             </thead>
             <tbody>

@@ -53,7 +53,7 @@ export default async function HistoryPage() {
                 <th>VIX</th>
                 <th>S5FI</th>
                 <th>3 red days</th>
-                <th>Forward return</th>
+                <th>Return since signal</th>
               </tr>
             </thead>
             <tbody>

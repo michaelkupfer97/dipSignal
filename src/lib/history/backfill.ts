@@ -3,6 +3,7 @@ import { getFearGreedHistory } from "@/lib/indicators/fearGreed";
 import { calculateS5fiHistoryFromConstituents } from "@/lib/indicators/s5fi";
 import { fetchPublishedS5fiHistory } from "@/lib/market/s5fiProviders";
 import { getDailyCandles } from "@/lib/market/yahoo";
+import { returnSinceSignalPct } from "./forwardReturns";
 import { setHistory } from "./historyStore";
 
 function candleMap(candles: Candle[]) {
@@ -20,12 +21,13 @@ function threeRedDaysByDate(spx: Candle[], index: number) {
   );
 }
 
-function forwardReturn(spx: Candle[], index: number, sessions = 20) {
-  const future = spx[index + sessions];
-  if (!future) {
+function liveReturnSinceSignal(spx: Candle[], index: number) {
+  const latest = spx.at(-1);
+  if (!latest) {
     return null;
   }
-  return ((future.close - spx[index]!.close) / spx[index]!.close) * 100;
+  const base = spx[index]!.close;
+  return returnSinceSignalPct(base, latest.close);
 }
 
 export async function backfillTwoYears() {
@@ -90,7 +92,7 @@ export async function backfillTwoYears() {
       redDays,
       rulesMet,
       sp500Close: candle.close,
-      forwardReturnPct: forwardReturn(spx, index),
+      forwardReturnPct: rulesMet >= 2 ? liveReturnSinceSignal(spx, index) : null,
     });
 
     return accumulator;
