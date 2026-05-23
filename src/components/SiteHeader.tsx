@@ -72,6 +72,13 @@ export function SiteHeader() {
                 בלוג
               </Link>
               <Link
+                href="/he/tools"
+                className={navClass("/he/tools")}
+                aria-current={isActive("/he/tools") ? "page" : undefined}
+              >
+                כלים
+              </Link>
+              <Link
                 href="/he/built-by"
                 className={navClass("/he/built-by")}
                 aria-current={isActive("/he/built-by") ? "page" : undefined}
@@ -112,6 +119,13 @@ export function SiteHeader() {
                 aria-current={isActive("/blog") ? "page" : undefined}
               >
                 Blog
+              </Link>
+              <Link
+                href="/tools"
+                className={navClass("/tools")}
+                aria-current={isActive("/tools") ? "page" : undefined}
+              >
+                Tools
               </Link>
               <Link
                 href="/about"

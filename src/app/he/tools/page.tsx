@@ -1,0 +1,63 @@
+import type { Metadata } from "next";
+
+/** Hebrew copy as \\u escapes for reliable UTF-8 source on Windows. */
+const copy = {
+  metaTitle: "\u05db\u05dc\u05d9\u05dd \u05d5\u05de\u05e9\u05d0\u05d1\u05d9\u05dd",
+  metaDescription:
+    "\u05db\u05dc\u05d9\u05dd \u05e0\u05d1\u05d7\u05e8\u05d9\u05dd \u05de\u05de\u05d9\u05db\u05d4 \u05e1\u05d8\u05d5\u05e7\u05e1 - \u05ea\u05db\u05e0\u05d5\u05df \u05e4\u05e8\u05d9\u05e9\u05d4, \u05de\u05d7\u05e9\u05d1\u05d5\u05e0\u05d9 \u05e8\u05d9\u05d1\u05d9\u05ea \u05d3\u05e8\u05d9\u05d1\u05d9\u05ea \u05d5\u05e2\u05d5\u05d3.",
+  eyebrow: "\u05de\u05d9\u05db\u05d4 \u05e1\u05d8\u05d5\u05e7\u05e1",
+  title: "\u05db\u05dc\u05d9\u05dd \u05d5\u05de\u05e9\u05d0\u05d1\u05d9\u05dd",
+  intro:
+    "\u05de\u05d7\u05e9\u05d1\u05d5\u05e0\u05d9\u05dd \u05d5\u05de\u05d3\u05e8\u05d9\u05db\u05d9\u05dd \u05e0\u05d1\u05d7\u05e8\u05d9\u05dd \u05de\u05d0\u05e7\u05d5\u05e1\u05d9\u05e1\u05d8\u05dd \u05de\u05d9\u05db\u05d4 \u05e1\u05d8\u05d5\u05e7\u05e1. \u05e7\u05d9\u05e9\u05d5\u05e8\u05d9\u05dd \u05e0\u05d5\u05e1\u05e4\u05d9\u05dd \u05d9\u05ea\u05d5\u05d5\u05e1\u05e4\u05d5 \u05d1\u05d4\u05de\u05e9\u05da.",
+} as const;
+
+const tools = [
+  {
+    eyebrow: "\u05ea\u05db\u05e0\u05d5\u05df \u05e4\u05e8\u05d9\u05e9\u05d4",
+    title: "\u05de\u05d7\u05e9\u05d1\u05d5\u05df \u05d7\u05d9\u05e8\u05d5\u05ea \u05e4\u05d9\u05e0\u05e0\u05e1\u05d9\u05ea",
+    description:
+      "\u05db\u05de\u05d4 \u05e6\u05e8\u05d9\u05da \u05dc\u05d7\u05e1\u05d5\u05da \u05db\u05d3\u05d9 \u05dc\u05e6\u05d0\u05ea \u05dc\u05e4\u05e0\u05e1\u05d9\u05d4? \u05e1\u05de\u05dc\u05e5 \u05e8\u05d9\u05d1\u05d9\u05ea \u05d3\u05e8\u05d9\u05d1\u05d9\u05ea, \u05d4\u05e4\u05e7\u05d3\u05d5\u05ea \u05d7\u05d5\u05d3\u05e9\u05d9\u05d5\u05ea \u05d5\u05d0\u05d5\u05e4\u05e7 \u05d6\u05de\u05df \u05d0\u05d9\u05e9\u05d9 - \u05d5\u05d0\u05d7\u05e8 \u05db\u05da \u05d7\u05e9\u05d1 \u05dc\u05d0\u05d7\u05d5\u05e8 \u05de\u05d4\u05de\u05e1\u05e4\u05e8 \u05e9\u05d0\u05ea\u05d4 \u05e6\u05e8\u05d9\u05da \u05dc\u05d4\u05d2\u05d9\u05e2 \u05d0\u05dc\u05d9\u05d5.",
+    href: "https://www.michastocks.app/financial-freedom",
+    cta: "\u05e4\u05ea\u05d7 \u05d0\u05ea \u05d4\u05de\u05d7\u05e9\u05d1\u05d5\u05df",
+  },
+] as const;
+
+export const metadata: Metadata = {
+  title: copy.metaTitle,
+  description: copy.metaDescription,
+  alternates: {
+    canonical: "/he/tools",
+    languages: {
+      en: "/tools",
+      he: "/he/tools",
+    },
+  },
+};
+
+export default function HebrewToolsPage() {
+  return (
+    <main className="container article" dir="rtl">
+      <p className="eyebrow">{copy.eyebrow}</p>
+      <h1>{copy.title}</h1>
+      <p>{copy.intro}</p>
+
+      <div className="tools-grid">
+        {tools.map((tool) => (
+          <article key={tool.href} className="tool-card card">
+            <p className="eyebrow tool-card__eyebrow">{tool.eyebrow}</p>
+            <h2 className="tool-card__title">{tool.title}</h2>
+            <p className="tool-card__description">{tool.description}</p>
+            <a
+              href={tool.href}
+              className="button tool-card__cta"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {tool.cta}
+            </a>
+          </article>
+        ))}
+      </div>
+    </main>
+  );
+}
