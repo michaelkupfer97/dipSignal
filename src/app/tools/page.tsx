@@ -22,6 +22,14 @@ const tools = [
     href: "https://www.michastocks.app/financial-freedom",
     cta: "Open calculator",
   },
+  {
+    eyebrow: "Savings Goals",
+    title: "Reverse Compound Interest Calculator",
+    description:
+      "Set your target amount, starting capital, and timeline - the calculator figures out how much to save each month, how long to invest, or what return you need to get there.",
+    href: "https://reversecompoundinterest.com/",
+    cta: "Open calculator",
+  },
 ] as const;
 
 export default function ToolsPage() {
