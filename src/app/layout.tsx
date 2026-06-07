@@ -3,6 +3,7 @@ import { Fira_Code, Fira_Sans, Heebo } from "next/font/google";
 import "./globals.css";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const firaSans = Fira_Sans({
   subsets: ["latin"],
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         {children}
         <SiteFooter />
       </body>
+      <GoogleAnalytics gaId="G-JCP4C6550T" />
     </html>
   );
 }
